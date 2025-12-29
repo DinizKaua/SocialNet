@@ -43,7 +43,7 @@ public class AnalisadorRedeSocial {
         return Collections.emptyList(); // Caminho nao encontrado
     }
 
-    public List<Usuario> reconstruirCaminho(Map<Usuario, Usuario> predecessores, Usuario destino) {
+    private List<Usuario> reconstruirCaminho(Map<Usuario, Usuario> predecessores, Usuario destino) {
         List<Usuario> caminho = new LinkedList<>();
         Usuario atual = destino;
 
@@ -129,6 +129,52 @@ public class AnalisadorRedeSocial {
                 dfsComunidade(vizinho, visitados, comunidade);
             }
         }
+    }
+
+    public List<Usuario> encontrarInfluenciadores(int topN) {
+        if(topN <= 0) {
+            return Collections.emptyList();
+        }
+
+        List<Usuario> usuarios = new ArrayList<>(grafo.getVertices());
+        usuarios.sort((u1, u2) -> {
+            int grauU1 = grafo.getGrau(u1);
+            int grauU2 = grafo.getGrau(u2);
+            return Integer.compare(grauU2, grauU1);
+        });
+
+        if(topN > usuarios.size()) {
+            topN = usuarios.size();
+        }
+        return usuarios.subList(0, topN);
+    }
+
+    public boolean possuiCiclo(){
+        Set<Usuario> visitados = new HashSet<>();
+
+        for(Usuario usuario : grafo.getVertices()) {
+            if(!visitados.contains(usuario)) {
+                if(dfsDetectarCiclo(usuario, null, visitados)) {
+                    return true; // Ciclo encontrado
+                }
+            }
+        }
+        return false; // Nenhum ciclo encontrado
+    }
+
+    private boolean dfsDetectarCiclo(Usuario atual, Usuario pai, Set<Usuario> visitados) {
+        visitados.add(atual);
+
+        for(Usuario vizinho : grafo.getAdjacentes(atual)) {
+            if(!visitados.contains(vizinho)) {
+                if(dfsDetectarCiclo(vizinho, atual, visitados)) {
+                    return true;
+                }
+            } else if(!vizinho.equals(pai)) {
+                return true; // Ciclo detectado
+            }
+        }
+        return false;
     }
 
     
