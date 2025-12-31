@@ -1,8 +1,11 @@
 package Sitema;
 
 import Grafo.Grafo;
+import Grafo.ListaAdjacencia;
+import Modelo.Conexao;
 import Modelo.Usuario;
 
+import java.time.LocalDate;
 import java.util.*;
 public class AnalisadorRedeSocial {
     private Grafo<Usuario> grafo;
@@ -177,5 +180,94 @@ public class AnalisadorRedeSocial {
         return false;
     }
 
-    
+    // dijkstra
+    public Map<Usuario, Double> calcularDistanciaSocial(Usuario origem) {
+        Map<Usuario, Double> distancias = new HashMap<>();
+        Set<Usuario> visitados = new HashSet<>();
+
+        for(Usuario usuario : grafo.getVertices()) {
+            distancias.put(usuario, Double.POSITIVE_INFINITY);
+        }
+        distancias.put(origem, 0.0);
+
+        PriorityQueue<Usuario> fila = new PriorityQueue<>(Comparator.comparingDouble(distancias::get));
+        fila.add(origem);
+
+        while(!fila.isEmpty()) {
+            Usuario atual = fila.poll();
+
+            if(visitados.contains(atual)) {
+                continue;
+            }
+            visitados.add(atual);
+
+            for(Usuario vizinho : grafo.getAdjacentes(atual)) {
+                double peso = grafo.getPeso(atual, vizinho);
+                double custo = 1.0 - peso;
+                double novaDistancia = distancias.get(atual) + custo;
+
+                if(novaDistancia < distancias.get(vizinho)) {
+                    distancias.put(vizinho, novaDistancia);
+                    fila.add(vizinho);
+                }
+            }
+        }
+        return distancias;
+    }
+
+    // tarjan
+    public List<Conexao> encontrarPontes() {
+        List<Conexao> pontes = new ArrayList<>();
+        Map<Usuario, Integer> disc = new HashMap<>();
+        Map<Usuario, Integer> low = new HashMap<>();
+        Map<Usuario, Usuario> pai = new HashMap<>();
+        Set<Usuario> visitados = new HashSet<>();
+
+        int[] tempo = {0}; // contador de tempo mutavel
+
+        for(Usuario usuario : grafo.getVertices()) {
+            if(!visitados.contains(usuario)) {
+                dfsPontes(usuario, visitados, disc, low, pai, tempo, pontes);
+            }
+        }
+        
+        return pontes;
+    }
+
+    private void dfsPontes(Usuario u, Set<Usuario> visitados, Map<Usuario, Integer> disc, Map<Usuario, Integer> low, Map<Usuario, Usuario> pai, int[] tempo, List<Conexao> pontes) {
+        visitados.add(u);
+        disc.put(u, ++tempo[0]);
+        low.put(u, disc.get(u));
+
+        for(Usuario v : grafo.getAdjacentes(u)) {
+            if(!visitados.contains(v)) {
+                pai.put(v, u);
+                dfsPontes(v, visitados, disc, low, pai, tempo, pontes);
+
+                low.put(u, Math.min(low.get(u), low.get(v)));
+
+                if(low.get(v) > disc.get(u)) {
+                    double peso = grafo.getPeso(u, v);
+                    pontes.add(new Conexao(u, v, peso, LocalDate.now()));
+                }
+            } else if(!v.equals(pai.get(u))) {
+                low.put(u, Math.min(low.get(u), disc.get(v)));
+            }
+        }
+    }
+
+    public Grafo<Usuario> encontrarRedeEssencial() {
+        Grafo<Usuario> arvore = new ListaAdjacencia<>();
+
+        List<Usuario> vertice = grafo.getVertices();
+        if(vertice.isEmpty()) {
+            return arvore;
+        }
+
+        Set<Usuario> naArvore = new HashSet<>();
+        Map<Usuario, Double> custoMinimo = new HashMap<>();
+        Map<Usuario, Usuario> pai = new HashMap<>();
+        
+        return arvore;
+    }
 }
