@@ -267,6 +267,45 @@ public class AnalisadorRedeSocial {
         Set<Usuario> naArvore = new HashSet<>();
         Map<Usuario, Double> custoMinimo = new HashMap<>();
         Map<Usuario, Usuario> pai = new HashMap<>();
+
+        for(Usuario usuario : vertice) {
+            custoMinimo.put(usuario, Double.POSITIVE_INFINITY);
+        }
+
+        Usuario inicial = vertice.get(0);
+        custoMinimo.put(inicial, 0.0);
+
+        PriorityQueue<Usuario> fila = new PriorityQueue<>(Comparator.comparingDouble(custoMinimo::get));
+        fila.add(inicial);
+
+        while(!fila.isEmpty()) {
+            Usuario atual = fila.poll();
+
+            if(naArvore.contains(atual)) {
+                continue;
+            }
+
+            naArvore.add(atual);
+            arvore.adicionarVertice(atual);
+
+            if(pai.containsKey(atual)) {
+                Usuario origem = pai.get(atual);
+                double peso = grafo.getPeso(origem, atual);
+                arvore.adicionarAresta(origem, atual, peso);
+            }
+
+            for(Usuario vizinho : grafo.getAdjacentes(atual)) {
+                if(!naArvore.contains(vizinho)) {
+                    double peso = grafo.getPeso(atual, vizinho);
+                    double custo = 1.0 - peso;
+                    if(custo < custoMinimo.get(vizinho)) {
+                        custoMinimo.put(vizinho, custo);
+                        pai.put(vizinho, atual);
+                        fila.add(vizinho);
+                    }
+                }
+            }
+        }
         
         return arvore;
     }
