@@ -1,4 +1,4 @@
-package Sitema;
+package Sistema;
 
 import Grafo.Grafo;
 import Grafo.ListaAdjacencia;
@@ -14,7 +14,7 @@ public class AnalisadorRedeSocial {
         this.grafo = grafo;
     }
 
-    // encontrar amigos em comum entre dois usuarios (bfs)
+    // Busca em Largura (BFS) - Amigos em comum
     public List<Usuario> encontrarCaminhoConexao(Usuario origem, Usuario destino) {
         if (origem == null || destino == null) {
             return Collections.emptyList();
@@ -57,9 +57,12 @@ public class AnalisadorRedeSocial {
         return caminho;
     }
 
-    // Exploração completa da rede (DFS)
+    // Busca em Profundidade (DFS) - Exploração completa
     public Set<Usuario> explorarRedeCompleta(Usuario origem) {
         Set<Usuario> visitados = new HashSet<>();
+        if(origem == null) {
+            return visitados;
+        }
         dfs(origem, visitados);
         return visitados;
     }
@@ -76,7 +79,7 @@ public class AnalisadorRedeSocial {
         }
     }
 
-    // recomendação por amigos em comun segundo grau)
+    // Recomendação por amigos em comum (2º grau)
     public List<Usuario> recomendarAmizades(Usuario usuario) {
         if(usuario == null) {
             return Collections.emptyList(); // Usuario nao existe
@@ -92,11 +95,6 @@ public class AnalisadorRedeSocial {
                     continue;
                 }
 
-                // ignora amigos diretos
-                if(amigosDiretos.contains(amigoDoAmigo)) {
-                    continue;
-                }
-
                 contagem.put(amigoDoAmigo, contagem.getOrDefault(amigoDoAmigo, 0) + 1);
             }
         }
@@ -108,6 +106,7 @@ public class AnalisadorRedeSocial {
         return recomendados;
     }
 
+    // Componentes conexas da rede
     public List<Set<Usuario>> identificarComunidades() {    
         List<Set<Usuario>> comunidades = new ArrayList<>();
         Set<Usuario> visitados = new HashSet<>();
@@ -134,6 +133,7 @@ public class AnalisadorRedeSocial {
         }
     }
 
+    // Usuários mais influentes (maior grau)
     public List<Usuario> encontrarInfluenciadores(int topN) {
         if(topN <= 0) {
             return Collections.emptyList();
@@ -151,8 +151,9 @@ public class AnalisadorRedeSocial {
         }
         return usuarios.subList(0, topN);
     }
-
-    public boolean possuiCiclo(){
+    
+    // Verificar se há ciclos na rede
+    public boolean possuiCiclos(){
         Set<Usuario> visitados = new HashSet<>();
 
         for(Usuario usuario : grafo.getVertices()) {
@@ -180,8 +181,11 @@ public class AnalisadorRedeSocial {
         return false;
     }
 
-    // dijkstra
+    // Dijkstra - Força da conexão
     public Map<Usuario, Double> calcularDistanciaSocial(Usuario origem) {
+        if(origem == null || !grafo.getVertices().contains(origem)) {
+            return Collections.emptyMap();
+        }
         Map<Usuario, Double> distancias = new HashMap<>();
         Set<Usuario> visitados = new HashSet<>();
 
@@ -215,7 +219,7 @@ public class AnalisadorRedeSocial {
         return distancias;
     }
 
-    // tarjan
+    // Detecção de pontes (arestas críticas)
     public List<Conexao> encontrarPontes() {
         List<Conexao> pontes = new ArrayList<>();
         Map<Usuario, Integer> disc = new HashMap<>();
@@ -256,6 +260,7 @@ public class AnalisadorRedeSocial {
         }
     }
 
+    // Árvore geradora mínima (Prim/Kruskal)
     public Grafo<Usuario> encontrarRedeEssencial() {
         Grafo<Usuario> arvore = new ListaAdjacencia<>();
 
@@ -308,5 +313,20 @@ public class AnalisadorRedeSocial {
         }
         
         return arvore;
+    }
+
+    // Grafo de Cointeresse (grafos bipartidos)
+    public Map<String, List<Usuario>> agruparPorInteresse(){
+        Map<String, List<Usuario>> grupos = new HashMap<>();
+
+        for(Usuario usuario : grafo.getVertices()) {
+            if(usuario.getInteresses() == null) {
+                continue;
+            }
+            for(String interesse : usuario.getInteresses()) {
+                grupos.computeIfAbsent(interesse, k -> new ArrayList<>()).add(usuario);
+            }
+        }
+        return grupos;
     }
 }

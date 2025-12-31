@@ -1,4 +1,4 @@
-package Sitema;
+package Sistema;
 
 import Grafo.Grafo;
 import Grafo.ListaAdjacencia;
@@ -65,7 +65,12 @@ public class RedeSocial {
         for(Usuario u : grafo.getVertices()){
             System.out.print(u.getNome() + " -> ");
             List<Usuario> amigos = grafo.getAdjacentes(u);
-            System.out.println(amigos);
+            
+
+            for(Usuario amigo : amigos){
+                System.out.print(amigo.getNome() + " ");
+            }
+            System.out.println();
         }
     }
     
