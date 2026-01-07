@@ -63,12 +63,12 @@ public class RedeSocial {
     // visualizacao
     public void exibirRede(){
         for(Usuario u : grafo.getVertices()){
-            System.out.print(u.getNome() + " -> ");
+            System.out.print(u.getId() + "|" + u.getNome() + " -> ");
             List<Usuario> amigos = grafo.getAdjacentes(u);
             
 
             for(Usuario amigo : amigos){
-                System.out.print(amigo.getNome() + " ");
+                System.out.print(amigo.getNome() + ", ");
             }
             System.out.println();
         }

@@ -8,8 +8,7 @@ public static void main(String[] args) {
         RedeSocial rede = new RedeSocial();
         DatasetSocialNet.carregar(rede);
 
-        AnalisadorRedeSocial analisador =
-            new AnalisadorRedeSocial(rede.getGrafo());
+        AnalisadorRedeSocial analisador = new AnalisadorRedeSocial(rede.getGrafo());
 
         new SocialGraphMenu(rede, analisador).executar();
     }
