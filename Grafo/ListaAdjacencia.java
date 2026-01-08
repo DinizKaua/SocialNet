@@ -19,7 +19,7 @@ public class ListaAdjacencia<T> implements Grafo<T> {
 
     @Override
     public void removerVertice(T vertice) {
-        if(!adjacencias.containsKey(vertice)) return;
+        if(!adjacencias.containsKey(vertice)) return; // vertice nao existe
 
         // remove todas as arestas ligadas a ele
         for(T adj : adjacencias.get(vertice).keySet()) {
@@ -50,6 +50,7 @@ public class ListaAdjacencia<T> implements Grafo<T> {
         adicionarVertice(origem);
         adicionarVertice(destino);
 
+        // evita duplicatas
         if(!adjacencias.get(origem).containsKey(destino)) {
             adjacencias.get(origem).put(destino, peso);
             adjacencias.get(destino).put(origem, peso);

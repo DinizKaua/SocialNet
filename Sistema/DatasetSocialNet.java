@@ -38,7 +38,6 @@ public class DatasetSocialNet {
         rede.cadastrarUsuario(new Usuario("u10","João","joao@mail.com",
                 LocalDate.of(1998,6,27),null,List.of("Esporte","Saúde")));
 
-        // Comunidade 2
         rede.cadastrarUsuario(new Usuario("u11","Karla","karla@mail.com",
                 LocalDate.of(2001,10,10),null,List.of("Arte","Design")));
 
@@ -54,7 +53,6 @@ public class DatasetSocialNet {
         rede.cadastrarUsuario(new Usuario("u15","Olivia","olivia@mail.com",
                 LocalDate.of(1998,12,12),null,List.of("Leitura","Escrita")));
 
-        // Comunidade 3
         rede.cadastrarUsuario(new Usuario("u16","Paulo","paulo@mail.com",
                 LocalDate.of(1997,5,6),null,List.of("Negócios","Economia")));
 
@@ -70,7 +68,6 @@ public class DatasetSocialNet {
         rede.cadastrarUsuario(new Usuario("u20","Tiago","tiago@mail.com",
                 LocalDate.of(1998,7,7),null,List.of("Esporte","Corrida")));
 
-        // Comunidade 4
         rede.cadastrarUsuario(new Usuario("u21","Ursula","ursula@mail.com",
                 LocalDate.of(2000,10,30),null,List.of("Cinema","Direção")));
 
@@ -102,39 +99,26 @@ public class DatasetSocialNet {
                 LocalDate.of(1997,6,6),null,List.of("Cinema","Roteiro")));
 
         // ================= AMIZADES =================
-        // Comunidade 1 (ciclo + influenciador)
         rede.adicionarAmizade("u1","u2",0.9);
         rede.adicionarAmizade("u2","u3",0.8);
         rede.adicionarAmizade("u3","u1",0.7);
         rede.adicionarAmizade("u1","u4",0.6);
         rede.adicionarAmizade("u2","u5",0.5);
         rede.adicionarAmizade("u1","u6",0.8);
-        rede.adicionarAmizade("u1","u7",0.9); // u1 influenciador
-
-        // Ponte para comunidade 2
+        rede.adicionarAmizade("u1","u7",0.9); 
         rede.adicionarAmizade("u4","u11",0.4);
-
-        // Comunidade 2
         rede.adicionarAmizade("u11","u12",0.9);
         rede.adicionarAmizade("u12","u13",0.7);
         rede.adicionarAmizade("u13","u14",0.8);
         rede.adicionarAmizade("u14","u15",0.6);
         rede.adicionarAmizade("u11","u15",0.5);
-
-        // Ponte para comunidade 3
         rede.adicionarAmizade("u12","u16",0.4);
-
-        // Comunidade 3
         rede.adicionarAmizade("u16","u17",0.9);
         rede.adicionarAmizade("u17","u18",0.8);
         rede.adicionarAmizade("u18","u19",0.7);
         rede.adicionarAmizade("u19","u20",0.6);
-        rede.adicionarAmizade("u16","u18",0.9); // influenciador
-
-        // Ponte para comunidade 4
+        rede.adicionarAmizade("u16","u18",0.9);
         rede.adicionarAmizade("u18","u21",0.4);
-
-        // Comunidade 4
         rede.adicionarAmizade("u21","u22",0.8);
         rede.adicionarAmizade("u22","u23",0.7);
         rede.adicionarAmizade("u23","u24",0.6);

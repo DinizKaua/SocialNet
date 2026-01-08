@@ -2,9 +2,10 @@ package Grafo;
 
 import java.util.*;
 
+// Implementação de um grafo usando matriz de adjacência
 public class MatrizAdjacencia<T> implements Grafo<T> {
     private List<T> vertices;
-    private double[][] matriz;
+    private double[][] matriz; // se > 0, há uma aresta com peso igual ao valor
     private int numeroArestas;
 
     public MatrizAdjacencia() {
@@ -23,7 +24,7 @@ public class MatrizAdjacencia<T> implements Grafo<T> {
         vertices.add(vertice);
         int n = vertices.size();
         double[][] novaMatriz = new double[n][n];
-
+        // copia os valores antigos para a nova matriz
         for(int i = 0; i < n - 1; i++) {
             for(int j = 0; j < n - 1; j++) {
                 novaMatriz[i][j] = matriz[i][j];
@@ -42,6 +43,7 @@ public class MatrizAdjacencia<T> implements Grafo<T> {
         int n = vertices.size();
         double[][] novaMatriz = new double[n - 1][n - 1];
 
+        // copia os valores antigos para a nova matriz, pulando a linha e coluna do vertice removido
         for(int i = 0, ni = 0; i < n; i++) {
             if(i == idx) continue;
             for(int j = 0, nj = 0; j < n; j++) {
@@ -85,6 +87,7 @@ public class MatrizAdjacencia<T> implements Grafo<T> {
         int i = vertices.indexOf(origem);
         int j = vertices.indexOf(destino);
 
+        // evita duplicatas
         if(matriz[i][j] == 0.0) {
             matriz[i][j] = peso;
             matriz[j][i] = peso;

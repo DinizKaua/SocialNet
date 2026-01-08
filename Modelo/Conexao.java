@@ -28,8 +28,6 @@ public class Conexao {
     // toString para representação textual do objeto
     @Override
     public String toString() {
-        return origem.getNome() + " <-> " + destino.getNome() +
-               " | Força da Conexão: " + forcaConexao +
-               " | Data da Conexão: " + dataConexao;
+        return origem.getNome() + " <-> " + destino.getNome() +" | Força da Conexão: " + forcaConexao + " | Data da Conexão: " + dataConexao;
     }
 }
